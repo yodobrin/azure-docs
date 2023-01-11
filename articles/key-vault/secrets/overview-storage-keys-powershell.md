@@ -200,13 +200,9 @@ The commands in this section complete the following actions:
 
 First, set the variables to be used by the PowerShell cmdlets in the following steps. Be sure to update the \<YourStorageAccountName\> and \<YourKeyVaultName\> placeholders.
 
-We will also use the Azure PowerShell [New-AzStorageContext](/powershell/module/az.storage/new-azstoragecontext) cmdlets to get the context of your Azure storage account.
-
 ```azurepowershell-interactive
 $storageAccountName = <YourStorageAccountName>
 $keyVaultName = <YourKeyVaultName>
-
-$storageContext = New-AzStorageContext -StorageAccountName $storageAccountName -Protocol Https -StorageAccountKey Key1 #(or "Primary" for Classic Storage Account)
 ```
 
 ### Define a shared access signature definition template
@@ -264,13 +260,7 @@ Tags         :
 You can now use the [Get-AzKeyVaultSecret](/powershell/module/az.keyvault/get-azkeyvaultsecret) cmdlet with the `VaultName` and `Name` parameters to view the contents of that secret.
 
 ```azurepowershell-interactive
-$secret = Get-AzKeyVaultSecret -VaultName <YourKeyVaultName> -Name <SecretName>
-$ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secret.SecretValue)
-try {
-   $secretValueText = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr)
-} finally {
-   [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ssPtr)
-}
+$secretValueText = Get-AzKeyVaultSecret -VaultName <YourKeyVaultName> -Name <SecretName> -AsPlainText
 Write-Output $secretValueText
 ```
 
